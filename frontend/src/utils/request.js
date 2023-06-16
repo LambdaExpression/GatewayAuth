@@ -12,14 +12,14 @@ const post = (body) => ({
     body: JSON.stringify(body)
 });
 
-export function Login(uri, account, password) {
+export function Login(uri, account, password, jumpUrl) {
     let url = api + uri;
     if (uri.startsWith('http') || uri.startsWith('//')) {
         url = uri;
     }
     return new Promise((resolve, reject) => {
         var pd = MD5(password).toString().toUpperCase();
-        return fetch(url, post({"account": account, "password": pd}))
+        return fetch(url, post({"account": account, "password": pd, "url":jumpUrl}))
             .then(res=>res.json())
             .then(res => {
                 resolve(res)

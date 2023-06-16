@@ -67,6 +67,7 @@ proxySort=["test","serverstatusws","serverstatus"]
     target = "http://127.0.0.1:80"
     httpAuth = ["tom"]   # login account / 登录账号
     wsAuth = ["tom"]     # login account / 登录账号
+    cacheMaxAge = 604800 # Log in the expiration time for seconds, and do not set the default 2 hours / 登陆过期时间秒，不设置默认2小时
 
     [proxy.serverstatusws]
     path = "/public"

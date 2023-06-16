@@ -10,6 +10,7 @@ proxySort=["test","serverstatusws","serverstatus"]
     target = "http://127.0.0.1:80"
     httpAuth = ["tom"]   # login account / 登录账号
     wsAuth = ["tom"]     # login account / 登录账号
+    cacheMaxAge = 60000
 
     [proxy.serverstatusws]
     path = "/public"

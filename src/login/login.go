@@ -101,7 +101,8 @@ func HttpLogin(conf config.Config) {
 					session := md5Str(strconv.FormatInt(time.Now().UnixNano(), 10))
 					cache.Set(session, v.Account)
 
-					expiration := time.Now().Add(2 * time.Hour)
+					expiration := getExpiration(m, conf, r.URL.Path)
+
 					http.SetCookie(w, &http.Cookie{Name: CookieKey, Path: "/", Value: session, HttpOnly: true, Expires: expiration})
 
 					log.Println("ip:", clientIp, clientPublicIp, "account:", m["account"], "login success")
@@ -166,4 +167,21 @@ func md5Str(source string) string {
 func ClearCookie(w http.ResponseWriter) {
 	expiration := time.Now().Add(1 * time.Second)
 	http.SetCookie(w, &http.Cookie{Name: CookieKey, Path: "/", Value: "", Expires: expiration})
+}
+
+func getExpiration(m map[string]string, conf config.Config, path string) time.Time {
+	expiration := time.Now().Add(2 * time.Hour)
+	if m["url"] != "" {
+		for _, s := range conf.Base.ProxySort {
+			v := conf.Proxy[s]
+			if (strings.HasPrefix(m["url"], v.Path) || strings.HasPrefix(path+m["url"], v.Path)) && v.CacheMaxAge != 0 {
+				if v.CacheMaxAge == -1 {
+					expiration = time.Now().Add(365 * 24 * time.Hour)
+				} else {
+					expiration = time.Now().Add(time.Duration(v.CacheMaxAge) * time.Second)
+				}
+			}
+		}
+	}
+	return expiration
 }

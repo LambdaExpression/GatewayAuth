@@ -6,16 +6,28 @@ import (
 	"GatewayAuth/src/proxy"
 	"encoding/json"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 )
 
 var configPath string
+var printVersion bool
+
+var Version = "v1.0.1"
+var GoVersion = "not set"
+var GitCommit = "not set"
+var BuildTime = "not set"
 
 func main() {
 
 	start()
+
+	if printVersion {
+		version()
+		return
+	}
 
 	conf := config.Get(configPath)
 	jbyte, _ := json.Marshal(conf)
@@ -31,7 +43,15 @@ func main() {
 
 func start() {
 	flag.StringVar(&configPath, "c", "./config", "--c config file path / 配置文件路径")
+	flag.BoolVar(&printVersion, "v", false, "--v 打印程序构建版本")
 	flag.Parse()
+}
+
+func version() {
+	fmt.Printf("Version: %s\n", Version)
+	fmt.Printf("Go Version: %s\n", GoVersion)
+	fmt.Printf("Git Commit: %s\n", GitCommit)
+	fmt.Printf("Build Time: %s\n", BuildTime)
 }
 
 func configProxy(conf config.Config) {

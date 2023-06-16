@@ -49,7 +49,7 @@ function App(props) {
             return
         }
         setBackdropOpen(true);
-        Login("api/login", account, password)
+        Login("api/login", account, password, url)
             .then(res => {
                 if (res.code === 200) {
                     enqueueSnackbar(res.msg, snackbarStype('success'));
