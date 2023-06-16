@@ -31,7 +31,7 @@ jobs:
           source  nvm-0.34.0/nvm.sh
           nvm install v14.15.4
           nvm use v14.15.4
-          cnpm install -g yarn
+          npm install -g yarn
           cd frontend
           yarn install
           cd ..
