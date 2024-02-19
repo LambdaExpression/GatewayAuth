@@ -25,7 +25,8 @@ jobs:
       - name: TEST
         run: |
           ls -lh /home/runner/.gvm/scripts
-          sudo source /home/runner/.gvm/scripts/gvm
+          source 1
+          source /home/runner/.gvm/scripts/gvm
       - name: Build
         run: |
           echo 1
