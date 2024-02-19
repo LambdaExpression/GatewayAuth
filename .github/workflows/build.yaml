@@ -22,6 +22,10 @@ jobs:
           sudo apt-get install wget
           bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
           
+      - name: TEST
+        run: |
+          ls -lh /home/runner/.gvm/scripts
+          
       - name: Build
         run: |
           source /home/runner/.gvm/scripts/gvm
