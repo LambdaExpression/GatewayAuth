@@ -18,13 +18,14 @@ jobs:
 
       - name: InstallGvm
         run: |
+          sudo apt-get update
           sudo apt-get install wget
           bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
           
       - name: TEST
         run: |
           ls -lh /home/runner/.gvm/scripts
-          source /home/runner/.gvm/scripts/gvm
+          sudo source /home/runner/.gvm/scripts/gvm
       - name: Build
         run: |
           echo 1
