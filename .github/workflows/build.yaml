@@ -16,28 +16,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: InstallGvm
+      - name: Build
         run: |
           sudo apt-get update
           sudo apt-get install wget
+          sudo apt-get install bison
+          apt-get install bsdmainutils
           bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-          
-      - name: TEST
-        run: |
-          ls -lh /home/runner/.gvm/scripts
-          source 1
           source /home/runner/.gvm/scripts/gvm
-      - name: Build
-        run: |
-          echo 1
           gvm install go1.16.3 -B
-          echo 2
           gvm use go1.16.3
-          echo 3
           go get -u github.com/go-bindata/go-bindata/...
-          echo 4
           go-bindata -version
-          echo 5
           wget https://github.com/creationix/nvm/archive/v0.34.0.tar.gz
           tar -zxvf v0.34.0.tar.gz
           source  nvm-0.34.0/nvm.sh
