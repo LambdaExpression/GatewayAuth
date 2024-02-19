@@ -25,7 +25,6 @@ jobs:
       - name: TEST
         run: |
           ls -lh /home/runner/.gvm/scripts
-          source /home/runner/.gvm/scripts/gvm
           
       - name: Build
         run: |
