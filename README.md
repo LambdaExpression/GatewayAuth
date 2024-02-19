@@ -58,7 +58,11 @@ $ ./gatewayAuth_darwin_amd64_1_0_0 -c ./config.toml
 [base]     
 port = 8094
 # proxy execution order / 代理执行顺序
-proxySort=["test","serverstatusws","serverstatus"] 
+proxySort=["test","serverstatusws","serverstatus"]
+
+# SSL certificate configuration, use http access when not configured / SSL证书配置，不配置时使用http访问
+# sslCertificate = "ssl.crt"      # ssl certificate / SSL证书
+# sslCertificateKey = "ssl.key"   # ssl certificate key / SSL证书私钥
 
 [proxy]
 

@@ -1,7 +1,11 @@
 [base]
 port = 8094
 # proxy execution order / 代理执行顺序
-proxySort=["test","serverstatusws","serverstatus"]
+proxySort = ["test","serverstatusws","serverstatus"]
+
+# SSL certificate configuration, use http access when not configured / SSL证书配置，不配置时使用http访问
+# sslCertificate = "ssl.crt"      # ssl certificate / SSL证书
+# sslCertificateKey = "ssl.key"   # ssl certificate key / SSL证书私钥
 
 [proxy]
 
@@ -10,7 +14,7 @@ proxySort=["test","serverstatusws","serverstatus"]
     target = "http://127.0.0.1:80"
     httpAuth = ["tom"]   # login account / 登录账号
     wsAuth = ["tom"]     # login account / 登录账号
-    cacheMaxAge = 60000
+    cacheMaxAge = 604800 # Log in the expiration time for seconds, and do not set the default 2 hours / 登陆过期时间秒，不设置默认2小时
 
     [proxy.serverstatusws]
     path = "/public"

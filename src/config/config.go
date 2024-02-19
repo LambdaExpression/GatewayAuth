@@ -12,8 +12,10 @@ type Config struct {
 }
 
 type Base struct {
-	Port      int      `toml:"port"`
-	ProxySort []string `toml:"proxySort"`
+	Port              int      `toml:"port"`
+	ProxySort         []string `toml:"proxySort"`
+	SslCertificate    string   `toml:"sslCertificate"`
+	SslCertificateKey string   `toml:"sslCertificateKey"`
 }
 
 type Proxy struct {

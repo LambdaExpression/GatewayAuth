@@ -4,6 +4,7 @@ import (
 	"GatewayAuth/src/config"
 	"GatewayAuth/src/login"
 	"GatewayAuth/src/proxy"
+	"GatewayAuth/src/util"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -38,7 +39,12 @@ func main() {
 	login.HttpLogin(conf)
 
 	log.Println("listen : " + strconv.Itoa(conf.Base.Port))
-	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(conf.Base.Port), nil))
+
+	if util.UseSsl(conf) {
+		log.Fatal(http.ListenAndServeTLS(":"+strconv.Itoa(conf.Base.Port), conf.Base.SslCertificate, conf.Base.SslCertificateKey, nil))
+	} else {
+		log.Fatal(http.ListenAndServe(":"+strconv.Itoa(conf.Base.Port), nil))
+	}
 }
 
 func start() {

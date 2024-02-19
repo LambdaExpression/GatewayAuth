@@ -1,6 +1,7 @@
 package util
 
 import (
+	"GatewayAuth/src/config"
 	"net/http"
 	"strings"
 )
@@ -18,4 +19,8 @@ func GetUrlArg(r *http.Request, name string) string {
 	values := r.URL.Query()
 	arg = values.Get(name)
 	return arg
+}
+
+func UseSsl(conf config.Config) bool {
+	return conf.Base.SslCertificate != "" && conf.Base.SslCertificateKey != ""
 }
