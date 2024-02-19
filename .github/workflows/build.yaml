@@ -16,14 +16,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.16.3'
+
       - name: Build
         run: |
-          sudo apt-get update
-          sudo apt-get install curl git mercurial make binutils bison gcc build-essential
-          bash < <(curl -s -S -L https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer)
-          source /home/runner/.gvm/scripts/gvm-default
-          gvm install go1.16.3 -B
-          gvm use go1.16.3
           go get -u github.com/go-bindata/go-bindata/...
           go-bindata -version
           wget https://github.com/creationix/nvm/archive/v0.34.0.tar.gz
