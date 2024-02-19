@@ -21,16 +21,20 @@ jobs:
         with:
           go-version: '1.16.3'
 
-      - name: Build
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14.15.4'
+
+      - name: Prepare
         run: |
           go get -u github.com/go-bindata/go-bindata/...
           go-bindata -version
-          wget https://github.com/creationix/nvm/archive/v0.34.0.tar.gz
-          tar -zxvf v0.34.0.tar.gz
-          source  nvm-0.34.0/nvm.sh
-          nvm install v14.15.4
-          nvm use v14.15.4
           npm install -g yarn
+
+      - name: Build
+        run: |
           cd frontend
           yarn install
           cd ..
