@@ -16,7 +16,7 @@ import (
 var configPath string
 var printVersion bool
 
-var Version = "v1.0.1"
+var Version = "v1.0.2"
 var GoVersion = "not set"
 var GitCommit = "not set"
 var BuildTime = "not set"
