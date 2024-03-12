@@ -37,16 +37,16 @@
 ```sh
 $ wget https://github.com/LambdaExpression/GatewayAuth/releases/download/v1.0.2/gatewayAuth_linux_amd64_1_0_1
 
-$ chmod +x gatewayAuth_linux_amd64_1_0_0
+$ chmod +x gatewayAuth_linux_amd64_1_0_1
 
-$ ./gatewayAuth_darwin_amd64_1_0_0 -h
-Usage of ./gatewayAuth_darwin_amd64_1_0_0:
+$ ./gatewayAuth_linux_amd64_1_0_1 -h
+Usage of ./gatewayAuth_linux_amd64_1_0_1:
   -c string
     	--c config file path / 配置文件路径 (default "./config")
     	
 $ echo -e '[base]\nport = 8094\nproxySort=["test"]\n[proxy]\n    [proxy.test]\n    path = "/"\n    target = "http://127.0.0.1:80"\n    httpAuth = ["tom"]\n[auth]\n    [auth.test]\n    account = "test"\n    password = "123"' > ./config.toml
 
-$ ./gatewayAuth_darwin_amd64_1_0_0 -c ./config.toml
+$ ./gatewayAuth_linux_amd64_1_0_1 -c ./config.toml
 2021/11/01 16:13:16 {"Base":{"Port":8094,"ProxySort":["test","serverstatusws","serverstatus"]},"Proxy":{"serverstatus":{"Path":"/","Target":"http://127.0.0.1:35601","CacheMaxAge":0,"HttpAuth":["tom"],"WsAuth":null},"serverstatusws":{"Path":"/public","Target":"http://127.0.0.1:35601","CacheMaxAge":0,"HttpAuth":null,"WsAuth":["tom"]},"test":{"Path":"/test","Target":"http://127.0.0.1:80","CacheMaxAge":0,"HttpAuth":["tom"],"WsAuth":["tom"]}},"Auth":{"test":{"Account":"test","Password":"123"},"tom":{"Account":"tom","Password":"123"}}}
 2021/11/01 16:13:16 listen : 8094
 
