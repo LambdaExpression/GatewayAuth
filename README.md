@@ -35,7 +35,7 @@
 [Download the version of the corresponding system](https://github.com/LambdaExpression/GatewayAuth/releases)
 
 ```sh
-$ wget https://github.com/LambdaExpression/GatewayAuth/releases/download/v1.0.0/gatewayAuth_linux_amd64_1_0_0
+$ wget https://github.com/LambdaExpression/GatewayAuth/releases/download/v1.0.2/gatewayAuth_linux_amd64_1_0_1
 
 $ chmod +x gatewayAuth_linux_amd64_1_0_0
 
