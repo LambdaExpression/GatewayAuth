@@ -1,6 +1,6 @@
 #!/bin/sh
 
-version=1_0_1
+version=1_0_3
 
 cd frontend
 yarn build
