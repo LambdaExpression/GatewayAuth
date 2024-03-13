@@ -4,11 +4,13 @@ import (
 	"GatewayAuth/src/config"
 	"GatewayAuth/src/login"
 	"GatewayAuth/src/util"
+	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strconv"
+	"strings"
 )
 
 // NewProxy takes target host and creates a reverse proxy
@@ -33,12 +35,24 @@ func ProxyRequestHandler(conf config.Config, proxy *httputil.ReverseProxy) func(
 		switch loginState {
 		case login.NotLogin:
 			login.ClearCookie(w)
-			http.SetCookie(w, &http.Cookie{Name: login.CookieKey, Path: "/", Value: "", HttpOnly: true, MaxAge: -1})
-			w.Header().Set("Location", "/login?"+paramEncode(r))
-			w.WriteHeader(http.StatusFound)
+			if r.Method != "GET" {
+				w.Header().Set("Content-Type", "application-json")
+				io.Copy(w, strings.NewReader(string(`{"code":401,"msg":"Login session expired / 登录已失效"}`)))
+				w.WriteHeader(http.StatusUnauthorized)
+			} else {
+				http.SetCookie(w, &http.Cookie{Name: login.CookieKey, Path: "/", Value: "", HttpOnly: true, MaxAge: -1})
+				w.Header().Set("Location", "/login?"+paramEncode(r))
+				w.WriteHeader(http.StatusFound)
+			}
 		case login.NoPermission:
-			w.Header().Set("Location", "/login?type=nopermission&"+paramEncode(r))
-			w.WriteHeader(http.StatusFound)
+			if r.Method != "GET" {
+				w.Header().Set("Content-Type", "application-json")
+				io.Copy(w, strings.NewReader(string(`{"code":403,"msg":"Account has no permission / 账号无权限"}`)))
+				w.WriteHeader(http.StatusForbidden)
+			} else {
+				w.Header().Set("Location", "/login?type=nopermission&"+paramEncode(r))
+				w.WriteHeader(http.StatusFound)
+			}
 		case login.AlreadyLogin:
 			serveHttp(proxy, cacheMaxAge, w, r)
 		case login.NoLogin:
