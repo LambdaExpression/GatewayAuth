@@ -10,7 +10,6 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"strconv"
-	"strings"
 )
 
 // NewProxy takes target host and creates a reverse proxy
@@ -36,9 +35,9 @@ func ProxyRequestHandler(conf config.Config, proxy *httputil.ReverseProxy) func(
 		case login.NotLogin:
 			login.ClearCookie(w)
 			if r.Method != "GET" {
-				w.Header().Set("Content-Type", "application-json")
-				io.Copy(w, strings.NewReader(string(`{"code":401,"msg":"Login session expired / 登录已失效"}`)))
+				w.Header().Set("Content-Type", "application-json;charset=utf-8")
 				w.WriteHeader(http.StatusUnauthorized)
+				io.WriteString(w, `{"code":401,"msg":"Login session expired / 登录已失效"}`)
 			} else {
 				http.SetCookie(w, &http.Cookie{Name: login.CookieKey, Path: "/", Value: "", HttpOnly: true, MaxAge: -1})
 				w.Header().Set("Location", "/login?"+paramEncode(r))
@@ -46,9 +45,9 @@ func ProxyRequestHandler(conf config.Config, proxy *httputil.ReverseProxy) func(
 			}
 		case login.NoPermission:
 			if r.Method != "GET" {
-				w.Header().Set("Content-Type", "application-json")
-				io.Copy(w, strings.NewReader(string(`{"code":403,"msg":"Account has no permission / 账号无权限"}`)))
+				w.Header().Set("Content-Type", "application-json;charset=utf-8")
 				w.WriteHeader(http.StatusForbidden)
+				io.WriteString(w, `{"code":403,"msg":"Account has no permission / 账号无权限"}`)
 			} else {
 				w.Header().Set("Location", "/login?type=nopermission&"+paramEncode(r))
 				w.WriteHeader(http.StatusFound)
