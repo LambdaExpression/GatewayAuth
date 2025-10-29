@@ -65,14 +65,15 @@ func loginCheck(isWs bool, v *config.Proxy, conf config.Config, r *http.Request)
 		return NotLogin, v.CacheMaxAge, nil
 	}
 
-	cv := cache.Get(cookieValue)
-	if cv == "" {
+	value, ok := cache.Catch.Get(cookieValue)
+	if !ok {
 		return NotLogin, v.CacheMaxAge, nil
 	}
+	cv := value.(string)
 
 	for _, v2 := range s {
 		p := conf.Auth[v2]
-		if cv == p.Account {
+		if p != nil && cv == p.Account {
 			return AlreadyLogin, v.CacheMaxAge, nil
 		}
 	}
@@ -99,9 +100,9 @@ func HttpLogin(conf config.Config) {
 				md5str := md5Str(v.Password)
 				if v.Account == m["account"] && md5str == m["password"] {
 					session := md5Str(strconv.FormatInt(time.Now().UnixNano(), 10))
-					cache.Set(session, v.Account)
 
-					expiration := getExpiration(m, conf, r.URL.Path)
+					expiration, cacheMaxAge := getExpiration(m, conf, r.URL.Path)
+					cache.Catch.Set(session, v.Account, cacheMaxAge)
 
 					http.SetCookie(w, &http.Cookie{Name: CookieKey, Path: "/", Value: session, HttpOnly: true, Expires: expiration})
 
@@ -169,8 +170,9 @@ func ClearCookie(w http.ResponseWriter) {
 	http.SetCookie(w, &http.Cookie{Name: CookieKey, Path: "/", Value: "", Expires: expiration})
 }
 
-func getExpiration(m map[string]string, conf config.Config, path string) time.Time {
+func getExpiration(m map[string]string, conf config.Config, path string) (time.Time, time.Duration) {
 	expiration := time.Now().Add(2 * time.Hour)
+	cacheMaxAge := 2 * time.Hour
 	if m["url"] != "" {
 		for _, s := range conf.Base.ProxySort {
 			v := conf.Proxy[s]
@@ -179,9 +181,10 @@ func getExpiration(m map[string]string, conf config.Config, path string) time.Ti
 					expiration = time.Now().Add(365 * 24 * time.Hour)
 				} else {
 					expiration = time.Now().Add(time.Duration(v.CacheMaxAge) * time.Second)
+					cacheMaxAge = time.Duration(v.CacheMaxAge) * time.Second
 				}
 			}
 		}
 	}
-	return expiration
+	return expiration, cacheMaxAge
 }
